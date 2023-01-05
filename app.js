@@ -4,6 +4,6 @@ const http=require('http')//imported
 }
 http.createServer(rqListener);*/
 const server=http.createServer((req,res)=>{
-console.log(req);
+console.log('Hi Reni');
 });
-server.listen(3000);
+server.listen(4000);
