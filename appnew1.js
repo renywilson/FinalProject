@@ -9,11 +9,12 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 app.use('/add-product',(req,res,next)=>{
    
-    res.send('<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</form>');
+    res.send('<form action="/product" method="POST"><label>Product</label><input type="text" name="title"><br><label>Quantity</label><input type="number" name="size"><br><button type="submit">Add Product</form>');
 
 });
 app.post('/product',(req,res,next)=>{//post method is used for only active this fn after post method..otherwise it will work all time...http post,get,put are can use
     console.log(req.body);
+
     res.redirect('/');
 });
 app.use('/',(req,res,next)=>{
