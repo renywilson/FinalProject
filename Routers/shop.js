@@ -1,9 +1,13 @@
-const express=require('express');
-const router=express.Router();
+const path = require('path');
 
-router.get('/',(req,res,next)=>{
-//not adding '/shop' here ,only in appnew2 js...but on calling in local host we need to call localhost3000/shop 
-    
-    res.send('<h1>Hello From Express....</h1>')
+const express = require('express');
+
+const rootDir = require('../util/path');
+
+const router = express.Router();
+
+router.get('/', (req, res, next) => {
+  res.sendFile(path.join(rootDir, 'views', 'shop.html'));
 });
-module.exports=router;
+
+module.exports = router;
