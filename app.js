@@ -14,7 +14,6 @@ app.use(cors());
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-//const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/user');
 
 app.use(bodyParser.json({ extended: false }));
@@ -22,10 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/user',userRoutes);
 
-/*app.get('user/get-user',async(req,res,next)=>{
-const user=await User.findAll();
-res.status(200).json({allUsers:users});
-});*/
+
 
 
 app.use(errorController.get404);
