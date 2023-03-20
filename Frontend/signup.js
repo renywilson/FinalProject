@@ -15,14 +15,18 @@ function onsubmit(e){
     console.log(obj);
 axios.post("http://localhost:5000/user/add-user",obj)
 .then((res) =>{
-  console.log(res.data);
+  if(res.status===201)
+  {
+    window.location.href="../login/login.html";
+  }
     
-
+else{
+  throw new Error('Login failed')
+}
     
   })
     .catch((err) =>{
-      alert("something went wrong")
-        console.log(err)})
+      document.body.innerHTML+=`<div style="color:red">${err}<div>`})
    
 }
    
