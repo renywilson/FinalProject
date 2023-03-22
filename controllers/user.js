@@ -3,75 +3,76 @@
 const User = require('../models/User')
 
 
-const getUser=async(req,res,next)=>{
-  
-   
-    const user=await User.findAll();
-res.status(200).json({allUsers:user});
-
-    }
+function isStringInvalid(string)
+{
+if(string==undefined||string.length===0)
+{
+    return true;
+}
+else {return false;}
+}
     
 const addUser=async(req,res,next)=>
 {
-/*try{
-    if(!req.body.phonenumber){
-        throw new Error('Phone number required');
-    }*/
+try{
     const name=req.body.name;
     const email=req.body.email;
-    const phonenumber=req.body.phonenumber;
-    const data=await User.create({name:name,email:email,phonenumber:phonenumber} );
+    const password=req.body.password;
+
+    if(isStringInvalid(name)||isStringInvalid(email)||isStringInvalid(password))
+    {
+        return res.status(400).json({err:'bad parameters,something missing'})
+    }
+    else
+    {
+   await User.create({name:name,email:email,password:password} );
     console.log(name);
-    console.log(data);
-    res.status(201).json({newUserDetail:data});
-//}
-/*catch (err)
+    
+    
+    res.status(201).json({message:"Sucessfully Registerd"});
+    }
+}
+catch (err)
 {
    res.status(500).json({
-        error:err
-   })
+        Error:'Existing User'})
   
-}*/}
+}}
 
-const deleteUser=async(req,res,next)=>{
-    // try{
-        
-    //     if(req.params.id=='undefined'){
-    //     console.log("id missing");
-    //     return res.status(400).json({err:'id missing'});
-    //     }
-        const uid=req.params.id;
-        console.log(uid);
-        await User.destroy({where:{ id:uid}});
-        res.sendStatus(200).json(err);
-        
-       
-       
-        
-    
-    // catch{
-    //     console.log(err);
-    //     res.sendStatus(500).json(err);
-    // }
+const login=async(req,res)=>{
+    try{
+        const{email,password}=req.body;
 
+            if(isstringinvalid(email)||isstringinvalid(password))
+                {
+                     return res.status(400).json({message:'E-mailid or password is missing',success:false})
+                }
+   console.log(password);
+const user=await User.FindAll({where:{email}})
+        if (user.length>0)
+            {
+            if(user[0].password===password)
+            {
+             res.status(200).json({success:true,message:'User loggedin Sucessfully'})
+            }
+             else
+             {
+             return res.status(400).json({success:false,message:'password incorrect'})
+             }
+            }
+      else{
+    return res.status(404).json({success:false,message:'User doesnot exist'})
+        }
+    }
+    catch(err)
+    {
+        res.status(500).json({message:err,success:false})
 
     }
-    const editUser=async(req,res,next)=>{
-        // try{
-            
-        //     if(req.params.id=='undefined'){
-        //     console.log("id missing");
-        //     return res.status(400).json({err:'id missing'});
-        //     }
-            const uid=req.params.id;
-            console.log(uid);
-            await User.update({where:{ id:uid}});
-            res.sendStatus(200).json(err);
-    }
-
+}
 module.exports={
-    getUser,
+   
     addUser,
-    deleteUser,
-    editUser
+    login
+   
 };
