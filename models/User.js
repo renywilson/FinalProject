@@ -1,8 +1,27 @@
-
 const Sequelize=require('sequelize');
 const sequelize=require('../util/database');
 
 const User=sequelize.define('user',{
+  id:{
+    type:Sequelize.INTEGER,
+    autoIncrement:true,
+    allowNull:false,
+    primaryKey:true
+  },
+  expense:{type:Sequelize.STRING},
+  description:{
+
+    type:Sequelize.STRING,
+  
+
+  },
+category:{
+
+    type:Sequelize.STRING,
+
+  }
+});
+const User1=sequelize.define('signup',{
   id:{
     type:Sequelize.INTEGER,
     autoIncrement:true,
@@ -15,12 +34,10 @@ const User=sequelize.define('user',{
     unique:true,
 
   },
-  phonenumber:{
+  password:{
     type:Sequelize.STRING,
     unique:true,
 
   }
 });
-module.exports=User;
-
-
+module.exports={User,User1};
