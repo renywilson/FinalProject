@@ -23,21 +23,29 @@ try{
     {
         return res.status(400).json({err:'bad parameters,something missing'})
     }
-    else
-    {
+
+
+     const saltround=10;
+        bcrypt.hash(password,saltround,async(err,hash)=>{
+            console.log(err);
+
+    
    await User.create({name:name,email:email,password:password} );
     console.log(name);
     
     
     res.status(201).json({message:"Sucessfully Registerd"});
-    }
-}
+          })
+
+        }
+
 catch (err)
 {
    res.status(500).json({
         Error:'Existing User'})
   
-}}
+}
+}
 
 const login=async(req,res)=>{
     try{
@@ -50,8 +58,12 @@ const login=async(req,res)=>{
    console.log(password);
 const user=await User.FindAll({where:{email}})
         if (user.length>0)
-            {
-            if(user[0].password===password)
+            { bcrypt.compare(password,user[0].password,(err,result)=>{
+                if(err){
+                    throw new Error('something went wrong')
+                }
+        
+            if(result===true)
             {
              res.status(200).json({success:true,message:'User loggedin Sucessfully'})
             }
@@ -59,7 +71,9 @@ const user=await User.FindAll({where:{email}})
              {
              return res.status(400).json({success:false,message:'password incorrect'})
              }
-            }
+            })
+        }
+
       else{
     return res.status(404).json({success:false,message:'User doesnot exist'})
         }
