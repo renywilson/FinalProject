@@ -1,7 +1,7 @@
 
 
 const User = require('../models/User')
-
+const bcrypt = require('bcrypt');
 
 const getUser=async(req,res,next)=>{
   
@@ -11,7 +11,14 @@ const getUser=async(req,res,next)=>{
 res.status(200).json(user);
 
     }
-    
+     function isStringInvalid(string)
+{
+if(string==undefined||string.length===0)
+{
+    return true;
+}
+else {return false;}
+}
 const addUser=async(req,res,next)=>
 {
     try{
@@ -24,7 +31,7 @@ const addUser=async(req,res,next)=>
             return res.status(400).json({err:'bad parameters,something missing'})
         }
     
-    
+    else{
          const saltround=10;
             bcrypt.hash(password,saltround,async(err,hash)=>{
                 console.log(err);
@@ -36,54 +43,45 @@ const addUser=async(req,res,next)=>
         
         res.status(201).json({message:"Sucessfully Registerd"});
               })
-    
             }
+           }
     
     catch (err)
-    {
-       res.status(500).json({
-            Error:'Existing User'})
+   {
+     res.status(500).json({
+           Error:'Existing User'})
       
-    }
+   }
     }
     
-    const login=async(req,res)=>{
-        try{
-            const{email,password}=req.body;
-    
-                if(isstringinvalid(email)||isstringinvalid(password))
-                    {
-                         return res.status(400).json({message:'E-mailid or password is missing',success:false})
-                    }
-       console.log(password);
-    const user=await User.FindAll({where:{email}})
-            if (user.length>0)
-                { bcrypt.compare(password,user[0].password,(err,result)=>{
-                    if(err){
-                        throw new Error('something went wrong')
-                    }
-            
-                if(result===true)
-                {
-                 res.status(200).json({success:true,message:'User loggedin Sucessfully'})
-                }
-                 else
-                 {
-                 return res.status(400).json({success:false,message:'password incorrect'})
-                 }
-                })
+  
+const login = async (req, res) => {
+    try{
+    const { email, password } = req.body;
+    if(isStringInvalid(email) || isStringInvalid(password)){
+        return res.status(400).json({message: 'EMail id or password is missing ', success: false})
+    }
+    console.log(password);
+    const user  = await User.findAll({ where : { email }})
+        if(user.length > 0){
+           bcrypt.compare(password, user[0].password, (err, result) => {
+           if(err){
+            throw new Error('Something went wrong')
+           }
+            if(result === true){
+                return res.status(200).json({success: true, message: "User logged in successfully"})
             }
-    
-          else{
-        return res.status(404).json({success:false,message:'User doesnot exist'})
-            }
+            else{
+            return res.status(400).json({success: false, message: 'Password is incorrect'})
+           }
+        })
+        } else {
+            return res.status(404).json({success: false, message: 'User Doesnot exitst'})
         }
-        catch(err)
-        {
-            res.status(500).json({message:err,success:false})
-    
-        }
+    }catch(err){
+        res.status(500).json({message: err, success: false})
     }
+}
 
 const deleteUser=async(req,res,next)=>{
   
