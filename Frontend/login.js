@@ -11,13 +11,11 @@ function login(e){
     }
     console.log(loginDetails)
  axios.post('http://localhost:4500/user/login',loginDetails).then(response=>{
-if(response.status===200)
-{
+localStorage.setItem('token',response.data.token);
+   window.location.href="./expensetracker.html";
     alert(response.data.message)
-}
-else{
-    throw new Error(response.data.message)
-    }
+
+
 }).catch(err=>{
     console.log(JSON.stringify(err))
     document.body.innerHTML+=`<div style="color:red">${err.message}<div>`;
