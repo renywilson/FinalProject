@@ -19,11 +19,11 @@ const forgotpassword = async (req, res) => {
             sgMail.setApiKey(process.env.SENGRID_API_KEY)
 
             const msg = {
-                to: 'renywilson@gmail.com', // Change to your recipient
-                from: 'neena@gmail.com', // Change to your verified sender
+                to: email, // Change to your recipient
+                from: 'yj.rocks.2411@gmail.com', // Change to your verified sender
                 subject: 'Sending with SendGrid is Fun',
                 text: 'and easy to do anywhere, even with Node.js',
-                html: `<a href="http://localhost:4500/password/resetpassword/${id}">Reset password</a>`,
+                html: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`,
             }
 
             sgMail

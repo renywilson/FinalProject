@@ -29,8 +29,8 @@ function isstringinvalid(string){
 
 }
 
-const generateAccessToken = (id, name, ispremiumuser) => {
-    return jwt.sign({ userId : id, name: name, ispremiumuser } ,'secretkey');
+function generateAccessToken(id) {
+    return jwt.sign(id ,process.env.TOKEN_SECRET);
 }
 
 const login = async (req, res) => {
