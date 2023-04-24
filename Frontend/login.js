@@ -12,6 +12,7 @@ function login(e){
     console.log(loginDetails)
  axios.post('http://localhost:4500/user/login',loginDetails).then(response=>{
 localStorage.setItem('token',response.data.token);
+localStorage.setItem('userDetails', JSON.stringify(response.data.user))
    window.location.href="./expensetracker.html";
     alert(response.data.message)
 
