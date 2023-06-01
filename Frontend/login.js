@@ -11,10 +11,17 @@ function login(e){
     }
     console.log(loginDetails)
  axios.post('http://localhost:4500/user/login',loginDetails).then(response=>{
-localStorage.setItem('token',response.data.token);
-localStorage.setItem('userDetails', JSON.stringify(response.data.user))
-   window.location.href="./expensetracker.html";
-    alert(response.data.message)
+    console.log(response.data)
+    if(response.status === 200){
+        localStorage.setItem('token', response.data.token);
+    
+       console.log(response.data.token)
+        window.location.href = "./expensetracker.html"; // change the page on successful login
+        alert(response.data.message)
+    } else {
+        throw new Error('Failed to login')
+    }
+
 
 
 }).catch(err=>{

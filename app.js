@@ -1,35 +1,59 @@
 const path = require('path');
-
+const fs=require('fs')
 const express = require('express');
-const bodyParser = require('body-parser');
+var cors = require('cors')
+const sequelize = require('./util/database');
+const User = require('./models/users');
+const Expense = require('./models/expenses');
+const Order = require('./models/orders');
+const Forgotpassword = require('./models/forgotpassword');
+const Download=require('./models/download');
+const helmet=require('helmet')
+const compression=require('compression')
+const morgan=require('morgan')
+const userRoutes = require('./routes/user')
+const expenseRoutes = require('./routes/expense')
+const purchaseRoutes = require('./routes/purchase')
+const premiumFeatureRoutes = require('./routes/premiumFeature')
+const resetPasswordRoutes = require('./routes/resetpassword')
+const accessLogStream=fs.createWriteStream(path.join(__dirname,'access.log'),{flags:'a'});
 const app = express();
-const sequelize=require('./util/database');
-const User=require('./models/User');
-var cors=require('cors');
+const dotenv = require('dotenv');
+require('dotenv').config();
+// get config vars
+dotenv.config();
+app.use(helmet());
+app.use(compression());
+app.use(morgan('combined',{stream:accessLogStream}));
 
-const errorController = require('./controllers/error');
-const db = require('./util/database');
+console.log()
+app.use(cors());   
 
-app.use(cors());
-app.set('view engine', 'ejs');
-app.set('views', 'views');
-
-const userRoutes = require('./routes/user');
-
-app.use(bodyParser.json({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/user',userRoutes);
+// app.use(bodyParser.urlencoded());  ////this is for handling forms
 
 
+app.use(express.json());  //this is for handling jsons
 
+app.use('/user', userRoutes)
+app.use('/expense', expenseRoutes)
+app.use('/purchase', purchaseRoutes)
+app.use('/premium', premiumFeatureRoutes)
+app.use('/password', resetPasswordRoutes);
 
-app.use(errorController.get404);
-sequelize.sync().then(result=>{
-    //console.log(result);
-    app.listen(5000);
-    
-})
+User.hasMany(Expense);
+ Expense.belongsTo(User);
 
-.catch((err)=>console.log(err));
-
+User.hasMany(Order);
+Order.belongsTo(User);
+User.hasMany(Forgotpassword);
+Forgotpassword.belongsTo(User);
+User.hasMany(Download)
+Download.belongsTo(User);
+console.log(process.env.NODE_ENV);
+sequelize.sync()
+    .then(() => {
+        app.listen(process.env.PORT||4500);
+    })
+    .catch(err => {
+        console.log(err);
+    })

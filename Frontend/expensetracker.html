@@ -39,6 +39,8 @@
     <body>
        
         <h3>Expense Tracker</h3>
+
+
         <section class="container" >
         <form id="myform" autocomplete="on">
 
@@ -64,20 +66,35 @@
         
         
             <input class="btn" type="submit" value="Add Expense"><br></div>
-        </form>
-        <div id="message"></div>
-        <button id="rzp-button1"> Buy Premeium</button> 
+            <div>
+         <div id="message"></div><br>
+        <button id="rzp-button1"> Buy Premeium</button> <br>
         <button onclick="download()" id="downloadexpense">Download File</button>
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-        <ul class="expense_details">
+        </div>
+        </form>
+        <select id="dropdown">
+            <option value="0">Select</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+          </select>
+          
+        <div>  <ul id="expenseList" class="expense_details">
        
         </ul> 
-       
+       </div>
+       <div id="pagination"></div>
     </section>
-    <div id='container'></div>
-    <hi>leaderBoardElement</hi>
-    
+    <div id='container' ></div>
+  
+    <button id="toggleButton">Download Url List</button>
+<div id="downloadUrlsContainer" style="display: none;"></div>
     </body>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
     <script src="expensetracker.js"></script> 
     

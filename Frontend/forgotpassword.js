@@ -1,14 +1,16 @@
 function forgotpassword(e) {
     e.preventDefault();
-    console.log(e.target.name);
-    const form = new FormData(e.target);
+ const value= e.target.email.value
+  
 
     const userDetails = {
-        email: form.get("email"),
+        email: value
 
     }
     console.log(userDetails)
-    axios.post('http://localhost:4500/password/forgotpassword',userDetails).then(response => {
+    const token=localStorage.getItem('token')
+  axios.post('http://localhost:4500/password/forgotpassword',userDetails,{headers:{"Authorization":token}}).then(response => {
+console.log(response.status)
         if(response.status === 202){
             document.body.innerHTML += '<div style="color:red;">Mail Successfuly sent <div>'
         } else {
